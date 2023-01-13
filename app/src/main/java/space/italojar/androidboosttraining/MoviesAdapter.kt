@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import space.italojar.androidboosttraining.databinding.ViewMovieItemBinding
 
 class MoviesAdapter(
-    private val movies: List<Movie>
+    private val movies: List<Movie>,
+    private val movieClickedListener: (movie: Movie) -> Unit
 ): RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,7 +20,9 @@ class MoviesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(movies[position])
+        val movie = movies[position]
+        holder.bind(movie)
+        holder.itemView.setOnClickListener { movieClickedListener(movie) }
     }
 
     override fun getItemCount(): Int = movies.size
@@ -31,6 +34,7 @@ class MoviesAdapter(
         val binding = ViewMovieItemBinding.bind(view)
         fun bind(movie: Movie) {
             binding.tvTitle.text = movie.title
+            Utils().loadImage(binding.root.context, movie.cover, binding.cover)
         }
     }
 }
